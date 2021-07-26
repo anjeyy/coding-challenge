@@ -1,5 +1,8 @@
 package com.github.anjeyy.distance;
 
+import java.util.Locale;
+import java.util.Objects;
+
 class Vertex {
 
   private final String label;
@@ -8,7 +11,7 @@ class Vertex {
     if (label == null) {
       throw new NullPointerException("'null' as vertex label is NOT allowed.");
     }
-    return new Vertex(label);
+    return new Vertex(label.toLowerCase(Locale.ROOT));
   }
 
   private Vertex(String label) {
@@ -17,14 +20,20 @@ class Vertex {
 
   @Override
   public int hashCode() {
-    //doit
-    return super.hashCode();
+    return Objects.hash(label);
   }
 
   @Override
   public boolean equals(Object obj) {
-    //doit
-    return super.equals(obj);
+    if (this == obj) {
+      return true;
+    } else if (obj == null) {
+      return false;
+    } else if (getClass() != obj.getClass()) {
+      return false;
+    }
+    Vertex other = (Vertex) obj;
+    return this.label.equals(other.label);
   }
 
   @Override

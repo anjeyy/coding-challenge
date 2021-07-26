@@ -7,10 +7,5 @@ public class Navigation {
 
     //doit main execution
 
-    Vertex solarSystem = Vertex.with("Solar System");
-    Vertex solarSystem2 = Vertex.with("Solar System");
-
-    boolean isSame = solarSystem.equals(solarSystem2);
-    System.out.println(isSame);
   }
 }
