@@ -14,3 +14,6 @@ buildNumber.properties
 ### IDE ###
 .idea
 **.iml
+
+### local ###
+todo.md
