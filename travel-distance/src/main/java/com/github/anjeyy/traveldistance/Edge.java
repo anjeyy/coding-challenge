@@ -1,4 +1,4 @@
-package com.github.anjeyy.distance;
+package com.github.anjeyy.traveldistance;
 
 import java.util.Objects;
 
@@ -21,6 +21,7 @@ class Edge {
         "Vertex source and destination has to be set."
       );
     }
+    checkForSelfReference(source, destination);
   }
 
   public Vertex getSource() {
@@ -28,6 +29,10 @@ class Edge {
   }
 
   public void setSource(Vertex source) {
+    if (source == null) {
+      throw new NullPointerException("Vertex source has to be set.");
+    }
+    checkForSelfReference(source, destination);
     this.source = source;
   }
 
@@ -36,6 +41,10 @@ class Edge {
   }
 
   public void setDestination(Vertex destination) {
+    if (destination == null) {
+      throw new NullPointerException("Vertex destination has to be set.");
+    }
+    checkForSelfReference(source, destination);
     this.destination = destination;
   }
 
@@ -45,6 +54,12 @@ class Edge {
 
   public void setWeight(int weight) {
     this.weight = weight;
+  }
+
+  private void checkForSelfReference(Vertex source, Vertex destination) {
+    if (source.equals(destination)) {
+      throw new IllegalArgumentException("No self reference allowed.");
+    }
   }
 
   @Override
@@ -58,5 +73,15 @@ class Edge {
   @Override
   public int hashCode() {
     return Objects.hash(source, destination);
+  }
+
+  @Override
+  public String toString() {
+    return String.format(
+      "[Edge: '%s' --(%d)-> '%s']",
+      source.getLabel(),
+      weight,
+      destination.getLabel()
+    );
   }
 }

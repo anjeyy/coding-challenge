@@ -1,4 +1,4 @@
-package com.github.anjeyy.distance;
+package com.github.anjeyy.traveldistance;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -16,6 +16,10 @@ class Vertex {
 
   private Vertex(String label) {
     this.label = label;
+  }
+
+  public String getLabel() {
+    return label;
   }
 
   @Override
