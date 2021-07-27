@@ -30,7 +30,7 @@ star systems are nodes, and the routes between them are _(weighted)_ edges.
 
 - There will be no more than one way per direction between any two-star systems.
 - Space highways always connect different star systems. That is, no space highway will connect a star system to itself.
-- For exercises 1—5 [below](): if there is no route, output `NO SUCH ROUTE`.
+- For exercises 1—5 [below](#sample-queries): if there is no route, output `NO SUCH ROUTE`.
 
 #### sample input
 
@@ -60,7 +60,30 @@ _Space highways_
 
 #### sample queries
 
-> todo
+The distance of route:
+
+1. Solar System -> Alpha Centauri -> Sirius - _9 hours_
+1. Solar System -> Betelgeuse - _5 hours_
+1. Solar System -> Betelgeuse -> Sirius - _13 hours_
+1. Solar System -> Vega -> Alpha Centauri -> Sirius -> Betelgeuse -_22 hours_
+1. Solar System -> Vega -> Betelgeuse - _NO SUCH ROUTE_
+1. Determine all routes starting at Sirius and ending at Sirius with a maximum of 3 stops. Solutions: **2 routes**
+   1. Sirius -> Betelgeuse -> Sirius - _(2 stops)_
+   1. Sirius -> Vega -> Alpha Centauri -> Sirius - _(3 stops)_
+1. Determine the number of routes starting at the solar system and ending at Sirius with exactly 3 stops in between. Solutions: **3 routes**
+   1. Solar System -> Alpha Centauri -> Sirius -> Betelgeuse -> Sirius
+   1. Solar System -> Betelgeuse -> Sirius -> Betelgeuse -> Sirius
+   1. Solar System -> Betelgeuse -> Vega -> Alpha Centauri -> Sirius
+1. Determine the duration of the shortest routes (in travel time) between _Solar System_ and _Sirius_. Solution: **9 hours**
+1. Determine the duration of the shortest routes (in travel time) starting at _Alpha Centauri_ and ending at A*lpha Centauri*. Solution: **9 hours**
+1. Determine all different routes starting at _Sirius_ and ending at _Sirius_ with an over travel time less than 30. Solution: **7 routes**
+   1. Sirius -> Betelgeuse -> Sirius
+   1. Sirius -> Vega -> Alpha Centauri -> Sirius
+   1. Sirius -> Vega -> Alpha Centauri -> Sirius -> Betelgeuse -> Sirius
+   1. Sirius -> Betelgeuse -> Sirius -> Vega-> Alpha Centauri -> Sirius
+   1. Sirius -> Betelgeuse -> Vega-> Alpha Centauri -> Sirius
+   1. Sirius -> Vega -> Alpha Centauri -> Sirius -> Vega -> Alpha Centauri -> Sirius
+   1. Sirius -> Vega -> Alpha Centauri -> Sirius -> Vega -> Alpha Centauri -> Sirius -> Vega -> Alpha Centauri -> Sirius
 
 ### design explanation
 

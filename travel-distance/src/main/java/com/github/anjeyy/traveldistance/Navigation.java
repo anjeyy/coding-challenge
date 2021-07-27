@@ -8,11 +8,19 @@ public class Navigation {
     //doit main execution
 
     Vertex solarSystem = Vertex.with("Solar System");
+    Vertex betelgeuse = Vertex.with("Betelgeuse");
+    Vertex sirius = Vertex.with("Sirius");
     Vertex vega = Vertex.with("Vega");
-    Edge solarSystemToVega = new Edge(solarSystem, vega, 7);
 
-    System.out.println(solarSystem);
-    System.out.println(vega);
-    System.out.println(solarSystemToVega);
+    Edge solarSystemToBetelgeuse = new Edge(solarSystem, betelgeuse, 5);
+    Edge betelgeuseToVega = new Edge(betelgeuse, vega, 6);
+    Edge betelgeuseToSirius = new Edge(betelgeuse, sirius, 8);
+
+    DirectedWeightedGraph firstGraph = DirectedWeightedGraph.create();
+    firstGraph.addEdge(solarSystemToBetelgeuse);
+    firstGraph.addEdge(betelgeuseToVega);
+    firstGraph.addEdge(betelgeuseToSirius);
+
+    System.out.println(firstGraph);
   }
 }

@@ -1,11 +1,17 @@
 package com.github.anjeyy.traveldistance;
 
+import com.github.anjeyy.traveldistance.util.StringConstant;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 class DirectedWeightedGraph {
+
+  private static final String NO_SUCH_ROUTE = "NO SUCH ROUTE";
 
   private final Map<Vertex, Set<Edge>> adjacencyList;
 
@@ -49,6 +55,62 @@ class DirectedWeightedGraph {
       adjacencyList.values().removeIf(e -> e.contains(edge));
     }
   }
-  //doit equals, hashcode, toString method
 
+  String travelTimeForGivenRoute(List<Vertex> vertices) {
+    int distance = 0;
+    for (Vertex currVertex : vertices) {
+      Set<Edge> edgeSet = adjacencyList.get(currVertex);
+      if (edgeSet == null) {
+        return NO_SUCH_ROUTE;
+      }
+      boolean destinationVertexIsNotPresent = edgeSet
+        .stream()
+        .map(Edge::getDestination)
+        .noneMatch(v -> v.equals(currVertex));
+      if (destinationVertexIsNotPresent) {
+        return NO_SUCH_ROUTE;
+      }
+      distance =
+        distance +
+        edgeSet
+          .stream()
+          .filter(e -> e.getDestination().equals(currVertex))
+          .findAny()
+          .map(Edge::getWeight)
+          .orElseThrow(
+            () ->
+              new IllegalStateException(
+                "Edges has to be present, due to prior check."
+              )
+          );
+    }
+    return distance + " hours";
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    DirectedWeightedGraph that = (DirectedWeightedGraph) o;
+    return adjacencyList.equals(that.adjacencyList);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(adjacencyList);
+  }
+
+  @Override
+  public String toString() {
+    String graphString = adjacencyList
+      .entrySet()
+      .stream()
+      .map(e -> e.getKey() + " -- " + e.getValue())
+      .collect(Collectors.joining(StringConstant.NEW_LINE.getValue()));
+    return (
+      "[Directed weighted graph: " +
+      StringConstant.NEW_LINE.getValue() +
+      graphString
+    );
+  }
 }

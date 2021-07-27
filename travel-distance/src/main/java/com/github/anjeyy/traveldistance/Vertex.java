@@ -28,15 +28,10 @@ class Vertex {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    } else if (obj == null) {
-      return false;
-    } else if (getClass() != obj.getClass()) {
-      return false;
-    }
-    Vertex other = (Vertex) obj;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Vertex other = (Vertex) o;
     return this.label.equals(other.label);
   }
 
