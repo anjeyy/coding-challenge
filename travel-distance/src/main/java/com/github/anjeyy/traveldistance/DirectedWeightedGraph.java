@@ -93,6 +93,24 @@ class DirectedWeightedGraph {
     return distance + " hours";
   }
 
+  String determineRoutesWithMaxStops(
+    Vertex source,
+    Vertex destination,
+    int maxStops
+  ) {
+    //doit
+    return null;
+  }
+
+  String determineRoutesWithExactStops(
+    Vertex source,
+    Vertex destination,
+    int exactStops
+  ) {
+    //doit
+    return null;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
