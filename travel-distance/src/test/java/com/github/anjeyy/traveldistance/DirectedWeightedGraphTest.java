@@ -1,7 +1,12 @@
 package com.github.anjeyy.traveldistance;
 
+import java.util.List;
+import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class DirectedWeightedGraphTest {
 
@@ -76,5 +81,85 @@ class DirectedWeightedGraphTest {
     // then
     Assertions.assertThat(isEqual).isFalse();
   }
-  //doit travel time parameterized test
+
+  @ParameterizedTest
+  @MethodSource("differentRoutes")
+  void givenSeveralRoutes_computeTravelTime_correctly(
+    List<Vertex> route,
+    String expected
+  ) {
+    // given
+    DirectedWeightedGraph graph = constructSpaceHighways();
+
+    // when
+    String actual = graph.travelTimeForGivenRoute(route);
+
+    // then
+    Assertions.assertThat(actual).isNotBlank().isEqualTo(expected);
+  }
+
+  private static Stream<Arguments> differentRoutes() {
+    return Stream.of(
+      Arguments.of(
+        List.of(
+          Vertex.with("Solar System"),
+          Vertex.with("Alpha Centauri"),
+          Vertex.with("Sirius")
+        ),
+        "9 hours"
+      ),
+      Arguments.of(
+        List.of(Vertex.with("Solar System"), Vertex.with("Betelgeuse")),
+        "5 hours"
+      ),
+      Arguments.of(
+        List.of(
+          Vertex.with("Solar System"),
+          Vertex.with("Betelgeuse"),
+          Vertex.with("Sirius")
+        ),
+        "13 hours"
+      ),
+      Arguments.of(
+        List.of(
+          Vertex.with("Solar System"),
+          Vertex.with("Vega"),
+          Vertex.with("Alpha Centauri"),
+          Vertex.with("Sirius"),
+          Vertex.with("Betelgeuse")
+        ),
+        "22 hours"
+      ),
+      Arguments.of(
+        List.of(
+          Vertex.with("Solar System"),
+          Vertex.with("Vega"),
+          Vertex.with("Betelgeuse")
+        ),
+        "NO SUCH ROUTE"
+      )
+    );
+  }
+
+  // ### H E L P E R ###
+
+  private DirectedWeightedGraph constructSpaceHighways() {
+    DirectedWeightedGraph graph = DirectedWeightedGraph.create();
+    createEdges().forEach(graph::addEdge);
+    return graph;
+  }
+
+  private List<Edge> createEdges() {
+    return List.of(
+      new Edge(Vertex.with("Solar System"), Vertex.with("Alpha Centauri"), 5),
+      new Edge(Vertex.with("Solar System"), Vertex.with("Betelgeuse"), 5),
+      new Edge(Vertex.with("Solar System"), Vertex.with("Vega"), 7),
+      new Edge(Vertex.with("Alpha Centauri"), Vertex.with("Sirius"), 4),
+      new Edge(Vertex.with("Betelgeuse"), Vertex.with("Sirius"), 8),
+      new Edge(Vertex.with("Betelgeuse"), Vertex.with("Vega"), 6),
+      new Edge(Vertex.with("Sirius"), Vertex.with("Betelgeuse"), 8),
+      new Edge(Vertex.with("Sirius"), Vertex.with("Vega"), 2),
+      new Edge(Vertex.with("Vega"), Vertex.with("Alpha Centauri"), 3)
+    );
+  }
 }

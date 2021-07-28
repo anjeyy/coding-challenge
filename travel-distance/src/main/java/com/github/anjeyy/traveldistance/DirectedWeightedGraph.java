@@ -58,15 +58,17 @@ class DirectedWeightedGraph {
 
   String travelTimeForGivenRoute(List<Vertex> vertices) {
     int distance = 0;
-    for (Vertex currVertex : vertices) {
+    for (int i = 0; i < vertices.size() - 1; i++) {
+      Vertex currVertex = vertices.get(i);
       Set<Edge> edgeSet = adjacencyList.get(currVertex);
       if (edgeSet == null) {
         return NO_SUCH_ROUTE;
       }
+      Vertex destination = vertices.get(i + 1);
       boolean destinationVertexIsNotPresent = edgeSet
         .stream()
         .map(Edge::getDestination)
-        .noneMatch(v -> v.equals(currVertex));
+        .noneMatch(v -> v.equals(destination));
       if (destinationVertexIsNotPresent) {
         return NO_SUCH_ROUTE;
       }
@@ -74,13 +76,17 @@ class DirectedWeightedGraph {
         distance +
         edgeSet
           .stream()
-          .filter(e -> e.getDestination().equals(currVertex))
+          .filter(e -> e.getDestination().equals(destination))
           .findAny()
           .map(Edge::getWeight)
           .orElseThrow(
             () ->
               new IllegalStateException(
-                "Edges has to be present, due to prior check."
+                String.format(
+                  "Edge '%s' from '%s' has to be present, due to prior check.",
+                  destination,
+                  edgeSet
+                )
               )
           );
     }
