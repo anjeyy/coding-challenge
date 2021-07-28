@@ -32,8 +32,7 @@ jobs:
       - name: Save artifacts for other jobs
         run: |
           mkdir -p path/to/artifact
-          cp ./grpc-client/target/grpc-client*.jar path/to/artifact
-          cp ./grpc-server/target/grpc-server*.jar path/to/artifact
+          cp ./travel-distance/target/travel-distance*.jar path/to/artifact
           ls -la path/to/artifact
 
 #      - name: Upload saved artifacts
