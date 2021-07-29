@@ -16,12 +16,24 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of a <i>directed</i>, <i>weighted</i> and possibly <i>cyclic</i> graph.
+ * For a detailed explanation please have a look at referenced links below.
+ *
+ * @see <a href="https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/">Graph data structure</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Graph_(abstract_data_type)">Wiki: Graph data type</a>
+ * @author Andjelko Perisic
+ */
 class DirectedWeightedGraph {
 
   private static final String NO_SUCH_ROUTE = "NO SUCH ROUTE";
 
   private final Map<Vertex, Set<Edge>> adjacencyList;
 
+  /**
+   * Static factory method for an easier use and initialization of {@link DirectedWeightedGraph}.
+   * @return initialized empty graph
+   */
   static DirectedWeightedGraph create() {
     return new DirectedWeightedGraph();
   }

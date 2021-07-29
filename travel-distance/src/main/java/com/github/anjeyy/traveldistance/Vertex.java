@@ -3,10 +3,24 @@ package com.github.anjeyy.traveldistance;
 import java.util.Locale;
 import java.util.Objects;
 
+/**
+ * Represents a so called node or vertex inside a graph data structure.<br>
+ * For a detailed explanation please have a look at referenced links below.
+ *
+ * @see <a href="https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/">Graph data structure</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Graph_(abstract_data_type)">Wiki: Graph data type</a>
+ * @author Andjelko Perisic
+ */
 class Vertex {
 
   private final String label;
 
+  /**
+   * Static factory method for an easier use and initialization of {@link Vertex}.
+   *
+   * @param label name of the vertex
+   * @return initialized vertex
+   */
   static Vertex with(String label) {
     if (label == null) {
       throw new NullPointerException("'null' as vertex label is NOT allowed.");
