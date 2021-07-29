@@ -35,6 +35,7 @@ jobs:
           cp ./travel-distance/target/travel-distance*.jar path/to/artifact
           ls -la path/to/artifact
 
+# doit as docker?
 #      - name: Upload saved artifacts
 #        uses: actions/upload-artifact@v2
 #        with:
