@@ -2,12 +2,29 @@ package com.github.anjeyy.traveldistance;
 
 import java.util.Objects;
 
+/**
+ * Represents a so called edge inside a graph data structure.<br>
+ * For a detailed explanation please have a look at referenced links below.
+ * <p>
+ * <b>Note: </b> Self-reference is NOT allowed.
+ *
+ * @see <a href="https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/">Graph data structure</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Graph_(abstract_data_type)">Wiki: Graph data type</a>
+ * @author Andjelko Perisic
+ */
 class Edge {
 
   private Vertex source;
   private Vertex destination;
   private int weight;
 
+  /**
+   * Initialized the edge and establishes a connection between two vertices, they are then so called neighbors.
+   *
+   * @param source starting vertex
+   * @param destination ending vertex
+   * @param weight value of the edge
+   */
   Edge(Vertex source, Vertex destination, int weight) {
     checkValidVertices(source, destination);
     this.source = source;
