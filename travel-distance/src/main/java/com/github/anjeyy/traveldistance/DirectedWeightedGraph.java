@@ -237,6 +237,21 @@ class DirectedWeightedGraph {
       .collect(Collectors.toList());
   }
 
+  /**
+   * A variation of the well-known <b>Dijkstra algorithm</b>, for further and detailed information
+   * please visit referenced link.
+   * <p>
+   * <b>Note:</b> This implementation has a slightly modified version, since it is possible to set the
+   * <b>SAME</b> vertex as {@code source} and {@code destination}.
+   *
+   * @throws IllegalStateException if there is no connection from source or destination is not reachable
+   *
+   * @see <a href="https://www.freecodecamp.org/news/dijkstras-shortest-path-algorithm-visual-introduction/">Dijkstra algorithm</a>
+   *
+   * @param source starting vertex
+   * @param destination ending vertex
+   * @return shortest route, if not present 'NO SUCH ROUTE'
+   */
   String calculateShortestRoute(Vertex source, Vertex destination) {
     if (preconditionFailed(source, destination)) {
       return NO_SUCH_ROUTE;
