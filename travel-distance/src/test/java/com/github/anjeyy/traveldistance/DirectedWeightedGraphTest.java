@@ -304,6 +304,76 @@ class DirectedWeightedGraphTest {
     Assertions.assertThat(actual).isNotBlank().isEqualTo(expected);
   }
 
+  @ParameterizedTest
+  @MethodSource("shortestPathRoutes")
+  void givenGraphWithValidVertices_calculateShortestRoute_correctly(
+    Vertex source,
+    Vertex destination,
+    String expected
+  ) {
+    // given
+    DirectedWeightedGraph graph = constructSpaceHighways();
+
+    // when
+    String actual = graph.calculateShortestRoute(source, destination);
+
+    // then
+    System.out.println(actual);
+  }
+
+  private static Stream<Arguments> shortestPathRoutes() {
+    return Stream.of(
+      Arguments.of(
+        Vertex.with("Solar System"),
+        Vertex.with("Sirius"),
+        "9 hours"
+      ),
+      Arguments.of(
+        Vertex.with("Alpha Centauri"),
+        Vertex.with("Alpha Centauri"),
+        "9 hours"
+      )
+    );
+  }
+
+  @Test
+  void givenGraphWithNegativeWeights_findShortestPath_throwsException() {
+    // given
+    DirectedWeightedGraph graph = DirectedWeightedGraph.create();
+    Vertex a = Vertex.with("a");
+    Vertex b = Vertex.with("b");
+    graph.addEdge(new Edge(a, b, -4));
+
+    // when
+    ThrowableAssert.ThrowingCallable expectedThrow = () ->
+      graph.calculateShortestRoute(a, b);
+
+    // then
+    Assertions
+      .assertThatThrownBy(expectedThrow)
+      .isInstanceOf(IllegalStateException.class)
+      .hasMessage(
+        "This Graph is in a non-appropriate state.\n" +
+        "No shortest path findings can be determined due to negative weights."
+      );
+  }
+
+  @Test
+  void givenGraphWithNotReachableDestination_findShortestPath_throwsException() {
+    // given
+    DirectedWeightedGraph graph = constructSpaceHighways();
+
+    // when
+    String actual = graph.calculateShortestRoute(
+      Vertex.with("Alpha Centauri"),
+      Vertex.with("Solar System")
+    );
+    String expected = "NO SUCH ROUTE";
+
+    // then
+    Assertions.assertThat(actual).isNotBlank().isEqualTo(expected);
+  }
+
   // ### H E L P E R ###
 
   private DirectedWeightedGraph constructSpaceHighways() {
