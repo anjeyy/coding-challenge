@@ -173,6 +173,98 @@ class DirectedWeightedGraph {
     return printFoundRoutes(paths);
   }
 
+  String determineAndDisplayRoutesWithMaxTime(
+    Vertex source,
+    Vertex destination,
+    int maxTime
+  ) {
+    if (maxTime < 1) {
+      throw new IllegalArgumentException("Please provide max time >0.");
+    }
+    List<List<Vertex>> paths = determineRoutesWithMaxWeights(
+      source,
+      destination,
+      maxTime
+    );
+    return printFoundRoutes(paths);
+  }
+
+  private List<List<Vertex>> determineRoutesWithMaxWeights(
+    Vertex source,
+    Vertex destination,
+    int maxTravelTime
+  ) {
+    if (preconditionFailed(source, destination)) {
+      return Collections.emptyList();
+    }
+
+    // starting point evaluation
+    Set<Edge> edgeSet = adjacencyList.get(source);
+    boolean maxTravelTimeExceeded = edgeSet
+      .stream()
+      .map(Edge::getWeight)
+      .noneMatch(i -> i < maxTravelTime);
+    if (maxTravelTimeExceeded) {
+      return Collections.emptyList();
+    }
+
+    // initialization
+    List<List<Vertex>> result = new ArrayList<>();
+    Queue<List<Vertex>> queue = new ArrayDeque<>();
+    List<Vertex> path = new ArrayList<>();
+    path.add(source);
+    queue.offer(path);
+
+    // iterative traversing
+    while (CollectionUtil.isNotEmpty(queue)) {
+      path = queue.poll();
+      Vertex lastVertex = CollectionUtil.retrieveLastElement(path);
+      if (lastVertex.equals(destination)) {
+        result.add(path);
+      }
+      // visit neighbors
+      List<Vertex> neighborVertices = getNeighborVertices(lastVertex);
+      for (Vertex neighbor : neighborVertices) {
+        int newPathTime = calculatePathTimeWithPotentialNeighbor(
+          path,
+          neighbor
+        );
+        if (newPathTime < maxTravelTime) {
+          List<Vertex> newPath = new ArrayList<>(path);
+          newPath.add(neighbor);
+          queue.offer(newPath);
+        }
+      }
+    }
+    return result
+      .stream()
+      .filter(e -> e.size() > 1) // remove self-reference
+      .collect(Collectors.toList());
+  }
+
+  private int calculatePathTimeWithPotentialNeighbor(
+    List<Vertex> path,
+    Vertex neighbor
+  ) {
+    List<Vertex> potentialNewPath = new ArrayList<>(path);
+    potentialNewPath.add(neighbor);
+
+    int time = 0;
+    for (int i = 0; i < potentialNewPath.size() - 1; i++) {
+      Vertex tmpStart = potentialNewPath.get(i);
+      Set<Edge> tmpStartNeighbors = adjacencyList.get(tmpStart);
+      Vertex tmpEnd = potentialNewPath.get(i + 1);
+      int currentTime = tmpStartNeighbors
+        .stream()
+        .filter(e -> e.getDestination().equals(tmpEnd))
+        .findAny()
+        .map(Edge::getWeight)
+        .orElseThrow();
+      time = time + currentTime;
+    }
+    return time;
+  }
+
   /**
    * Expected found paths from previously calculated methods. Displays is as a proper {@link String}.
    *

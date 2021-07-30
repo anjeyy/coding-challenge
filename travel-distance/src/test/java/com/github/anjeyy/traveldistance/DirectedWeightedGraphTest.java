@@ -374,6 +374,68 @@ class DirectedWeightedGraphTest {
     Assertions.assertThat(actual).isNotBlank().isEqualTo(expected);
   }
 
+  @Test
+  void givenGraphWithSameStartAndEndVertex_determineAllRoutesByTime_displaysCorrectly() {
+    // given
+    DirectedWeightedGraph graph = constructSpaceHighways();
+
+    // when
+    String actual = graph.determineAndDisplayRoutesWithMaxTime(
+      Vertex.with("Sirius"),
+      Vertex.with("Sirius"),
+      30
+    );
+    String expected =
+      "7 routes: \n" +
+      "[[Vertex: sirius], [Vertex: betelgeuse], [Vertex: sirius]]\n" +
+      "[[Vertex: sirius], [Vertex: vega], [Vertex: alpha centauri], [Vertex: sirius]]\n" +
+      "[[Vertex: sirius], [Vertex: betelgeuse], [Vertex: vega], [Vertex: alpha centauri], [Vertex: sirius]]\n" +
+      "[[Vertex: sirius], [Vertex: betelgeuse], [Vertex: sirius], [Vertex: vega], [Vertex: alpha centauri], [Vertex: sirius]]\n" +
+      "[[Vertex: sirius], [Vertex: vega], [Vertex: alpha centauri], [Vertex: sirius], [Vertex: betelgeuse], [Vertex: sirius]]\n" +
+      "[[Vertex: sirius], [Vertex: vega], [Vertex: alpha centauri], [Vertex: sirius], [Vertex: vega], [Vertex: alpha centauri], [Vertex: sirius]]\n" +
+      "[[Vertex: sirius], [Vertex: vega], [Vertex: alpha centauri], [Vertex: sirius], [Vertex: vega], [Vertex: alpha centauri], [Vertex: sirius], [Vertex: vega], [Vertex: alpha centauri], [Vertex: sirius]]";
+
+    // then
+    Assertions.assertThat(actual).isNotBlank().isEqualTo(expected);
+  }
+
+  @Test
+  void givenGraphWithNegativeTime_determineAllRoutesByTime_throwsException() {
+    // given
+    DirectedWeightedGraph graph = constructSpaceHighways();
+
+    // when
+    ThrowableAssert.ThrowingCallable expectedThrow = () ->
+      graph.determineAndDisplayRoutesWithMaxTime(
+        Vertex.with("Sirius"),
+        Vertex.with("Sirius"),
+        0
+      );
+
+    // then
+    Assertions
+      .assertThatThrownBy(expectedThrow)
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessage("Please provide max time >0.");
+  }
+
+  @Test
+  void givenGraphWithExceedingFirstStep_determineAllRoutesByTime_findsNoRoute() {
+    // given
+    DirectedWeightedGraph graph = constructSpaceHighways();
+
+    // when
+    String actual = graph.determineAndDisplayRoutesWithMaxTime(
+      Vertex.with("Solar System"),
+      Vertex.with("Alpha Centauri"),
+      1
+    );
+    String expected = "NO SUCH ROUTE";
+
+    // then
+    Assertions.assertThat(actual).isNotBlank().isEqualTo(expected);
+  }
+
   // ### H E L P E R ###
 
   private DirectedWeightedGraph constructSpaceHighways() {
