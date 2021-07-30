@@ -23,7 +23,7 @@ public final class CollectionUtil {
    * @param <E> erasure type
    * @return true if NOT empty, false otherwise
    */
-  public static <E> boolean isNotEmpty(Collection<E> collection) {
+  public static <E> boolean isNotEmpty(Collection<? super E> collection) {
     return !collection.isEmpty();
   }
 
@@ -35,11 +35,31 @@ public final class CollectionUtil {
    * @return last element
    * @throws IllegalArgumentException for any <code>null</code> or <i>empty list</i>
    */
-  public static <E> E retrieveLastElement(List<E> list) {
+  public static <E> E retrieveLastElement(List<? extends E> list) {
     if (list == null || list.isEmpty()) {
       throw new NullPointerException("Provide a non-null and non-empty list.");
     }
     int lastIndex = list.size() - 1;
     return list.get(lastIndex);
+  }
+
+  /**
+   * Evaluating whether an element is NOT part of a collection or not
+   *
+   * @param collection collection
+   * @param elementToCheck element to be checked
+   * @param <E> erasure type
+   * @return true if element is NOT part of provided collection, false otherwise
+   */
+  public static <E> boolean doesNotContain(
+    Collection<? super E> collection,
+    E elementToCheck
+  ) {
+    if (collection == null || elementToCheck == null) {
+      throw new NullPointerException(
+        "Provide a non-null list and element to be checked."
+      );
+    }
+    return !collection.contains(elementToCheck);
   }
 }

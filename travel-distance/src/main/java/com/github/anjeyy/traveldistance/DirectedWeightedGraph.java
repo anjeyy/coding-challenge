@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Implementation of a <i>directed</i>, <i>weighted</i> and possibly <i>cyclic</i> graph.
@@ -189,11 +192,7 @@ class DirectedWeightedGraph {
     Vertex destination,
     int maxStops
   ) {
-    // precondition check
-    Set<Edge> startingEdges = adjacencyList.get(source);
-    boolean sourceIsInvalid = startingEdges == null || startingEdges.isEmpty();
-    boolean destinationIsInvalid = isDestinationVertexValid(destination);
-    if (sourceIsInvalid || destinationIsInvalid) {
+    if (preconditionFailed(source, destination)) {
       return Collections.emptyList();
     }
 
@@ -228,15 +227,6 @@ class DirectedWeightedGraph {
       .collect(Collectors.toList());
   }
 
-  private boolean isDestinationVertexValid(Vertex destination) {
-    return adjacencyList
-      .values()
-      .stream()
-      .flatMap(Collection::stream)
-      .map(Edge::getDestination)
-      .noneMatch(v -> v.equals(destination));
-  }
-
   private List<Vertex> getNeighborVertices(Vertex vertex) {
     return Optional
       .of(vertex)
@@ -245,6 +235,170 @@ class DirectedWeightedGraph {
       .stream()
       .map(Edge::getDestination)
       .collect(Collectors.toList());
+  }
+
+  /**
+   * A variation of the well-known <b>Dijkstra algorithm</b>, for further and detailed information
+   * please visit referenced link.
+   * <p>
+   * <b>Note:</b> This implementation has a slightly modified version, since it is possible to set the
+   * <b>SAME</b> vertex as {@code source} and {@code destination}.
+   *
+   * @throws IllegalStateException if there is no connection from source or destination is not reachable
+   *
+   * @see <a href="https://www.freecodecamp.org/news/dijkstras-shortest-path-algorithm-visual-introduction/">Dijkstra algorithm</a>
+   *
+   * @param source starting vertex
+   * @param destination ending vertex
+   * @return shortest route, if not present 'NO SUCH ROUTE'
+   */
+  String calculateShortestRoute(Vertex source, Vertex destination) {
+    if (preconditionFailed(source, destination)) {
+      return NO_SUCH_ROUTE;
+    }
+    boolean negativeWeightPresent = adjacencyList
+      .values()
+      .stream()
+      .flatMap(Collection::stream)
+      .map(Edge::getWeight)
+      .anyMatch(v -> v < 0);
+    if (negativeWeightPresent) {
+      throw new IllegalStateException(
+        "This Graph is in a non-appropriate state.\n" +
+        "No shortest path findings can be determined due to negative weights."
+      );
+    }
+    Vertex tmpDestination = createTemporaryVertexForEqualStartAndEndVertex(
+      source,
+      destination
+    );
+    if (tmpDestination != null) {
+      destination = tmpDestination;
+    }
+
+    // initialize distance
+    Map<Vertex, Integer> distance = adjacencyList
+      .keySet()
+      .stream()
+      .collect(Collectors.toMap(Function.identity(), k -> Integer.MAX_VALUE));
+    distance.put(source, 0); //starting vertex
+    Set<Vertex> path = new HashSet<>();
+    path.add(source);
+
+    while (CollectionUtil.doesNotContain(path, destination)) {
+      // determine neighbors from already selected path set
+      Set<Edge> connectingEdges = path
+        .stream()
+        .map(adjacencyList::get)
+        .flatMap(Collection::stream)
+        .filter(Objects::nonNull)
+        .filter(e -> CollectionUtil.doesNotContain(path, e.getDestination())) // exclude vertices inside path
+        .collect(Collectors.toSet());
+
+      // update distance for vertices outside path
+      for (Edge neighbor : connectingEdges) {
+        Vertex vertexInsidePath = neighbor.getSource();
+        int currentPathDistance = distance.get(vertexInsidePath);
+        int neighborDistance = neighbor.getWeight();
+
+        Vertex vertexOutsidePath = neighbor.getDestination();
+        int newPathDistance = currentPathDistance + neighborDistance;
+        int oldUpdatedDistance = distance.get(vertexOutsidePath);
+        if (newPathDistance < oldUpdatedDistance) {
+          distance.put(vertexOutsidePath, newPathDistance);
+        }
+      }
+
+      // decide which node taking to the path
+      distance
+        .entrySet()
+        .stream()
+        .filter(e -> CollectionUtil.doesNotContain(path, e.getKey())) // only unvisited vertices
+        .min(Map.Entry.comparingByValue())
+        .map(Map.Entry::getKey)
+        .ifPresent(path::add);
+    }
+
+    if (tmpDestination != null) {
+      removeVertex(tmpDestination);
+    }
+    return distance.get(destination) + " hours";
+  }
+
+  private boolean preconditionFailed(Vertex source, Vertex destination) {
+    Set<Edge> startingEdges = adjacencyList.get(source);
+    boolean sourceIsInvalid = startingEdges == null || startingEdges.isEmpty();
+    boolean destinationIsInvalid = isDestinationVertexValid(destination);
+    return sourceIsInvalid || destinationIsInvalid;
+  }
+
+  private boolean isDestinationVertexValid(Vertex destination) {
+    return getAllEdgesAsStream()
+      .map(Edge::getDestination)
+      .noneMatch(v -> v.equals(destination));
+  }
+
+  /**
+   * Logically this is the same vertex, just for computation purpose it's being split into two different ones.<br>
+   * Specifically used to distinguish between <i>starting</i> and <i>ending</i> vertex, when they are the <b>SAME</b>.
+   *
+   * @param source starting vertex
+   * @param destination ending vertex
+   * @return duplicated and manipulated vertex for computation purpose
+   */
+  private Vertex createTemporaryVertexForEqualStartAndEndVertex(
+    Vertex source,
+    Vertex destination
+  ) {
+    Vertex tmpDestination = null;
+    if (source.equals(destination)) {
+      String temporaryName = findUniqueName(destination);
+      tmpDestination = Vertex.with(temporaryName);
+      Set<Edge> edgeSet = getAllEdgesAsStream()
+        .filter(e -> e.getDestination().equals(destination))
+        .collect(Collectors.toSet());
+      for (Edge edge : edgeSet) {
+        edge.setDestination(tmpDestination);
+      }
+      adjacencyList.put(tmpDestination, edgeSet);
+    }
+    return tmpDestination;
+  }
+
+  /**
+   * Helping method with a very simple and naive heuristic to duplicate a vertex. <br>
+   * Already provided name of a vertex is being added several times at the end, till there is no existing vertex.
+   *
+   * @param vertex vertex to duplicate
+   * @return unique name
+   */
+  private String findUniqueName(Vertex vertex) {
+    final String rawName = vertex.getLabel();
+    String tmpName = rawName + StringConstant.WHITESPACE.getValue() + rawName;
+    boolean nameNotFound = true;
+    while (nameNotFound) {
+      boolean nameExistsAlready = adjacencyList
+        .keySet()
+        .stream()
+        .map(Vertex::getLabel)
+        .collect(Collectors.toList())
+        .contains(tmpName);
+      if (nameExistsAlready) {
+        tmpName = tmpName + StringConstant.WHITESPACE.getValue() + rawName;
+      } else {
+        nameNotFound = false;
+      }
+    }
+    return tmpName;
+  }
+
+  /**
+   * Retrieve a stream of all edges, enabling for further transformation or extracting on the returned container.
+   *
+   * @return all edges as stream
+   */
+  private Stream<Edge> getAllEdgesAsStream() {
+    return adjacencyList.values().stream().flatMap(Collection::stream);
   }
 
   @Override
