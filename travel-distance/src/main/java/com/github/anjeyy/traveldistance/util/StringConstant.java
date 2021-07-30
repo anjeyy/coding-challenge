@@ -3,7 +3,8 @@ package com.github.anjeyy.traveldistance.util;
 public enum StringConstant {
   NEW_LINE("\n"),
   EMPTY(""),
-  WHITESPACE(" ");
+  WHITESPACE(" "),
+  COMMA(",");
 
   private final String value;
 
