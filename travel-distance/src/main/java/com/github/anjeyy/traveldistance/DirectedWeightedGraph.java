@@ -45,6 +45,10 @@ class DirectedWeightedGraph {
     adjacencyList = new HashMap<>();
   }
 
+  /**
+   * doit
+   * @param vertex
+   */
   void addVertex(Vertex vertex) {
     adjacencyList.putIfAbsent(vertex, new LinkedHashSet<>());
   }
