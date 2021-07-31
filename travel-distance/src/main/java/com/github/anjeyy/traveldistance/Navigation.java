@@ -38,18 +38,17 @@ public class Navigation {
       );
       int rawMode = input.nextInt();
       currentMode = Mode.from(rawMode);
-      if (currentMode == Mode.EXIT_PROGRAM) {
-        break;
-      }
 
-      String userInput = input.nextLine().trim();
-      checkUserInput(userInput, currentMode);
-      String result = currentMode.compute(graph, userInput);
-      System.out.println(
-        "MODE: " + currentMode + StringConstant.NEW_LINE.getValue()
-      );
-      System.out.println(result);
-      System.out.println(HORIZONTAL_LINE);
+      if (currentMode != Mode.EXIT_PROGRAM) {
+        String userInput = input.nextLine().trim();
+        checkUserInput(userInput, currentMode);
+        String result = currentMode.compute(graph, userInput);
+        System.out.println(
+          "MODE: " + currentMode + StringConstant.NEW_LINE.getValue()
+        );
+        System.out.println(result);
+        System.out.println(HORIZONTAL_LINE);
+      }
     }
     System.out.println("Navigation closed...");
   }

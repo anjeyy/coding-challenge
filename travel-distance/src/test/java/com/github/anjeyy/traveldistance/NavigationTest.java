@@ -1,6 +1,6 @@
 package com.github.anjeyy.traveldistance;
 
 class NavigationTest {
-  //doit all
+  //doit all program
 
 }
