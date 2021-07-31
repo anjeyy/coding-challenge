@@ -11,7 +11,9 @@ import java.util.stream.Stream;
 public class Navigation {
 
   private static final String HORIZONTAL_LINE =
-    "\n------------------------------------\n";
+    StringConstant.NEW_LINE.getValue() +
+    "------------------------------------" +
+    StringConstant.NEW_LINE.getValue();
 
   private static final Scanner input = new Scanner(System.in);
   private static final DirectedWeightedGraph graph = DirectedWeightedGraph.create();
@@ -23,7 +25,9 @@ public class Navigation {
       );
     }
     System.out.println(HORIZONTAL_LINE);
-    System.out.println("Starting Navigation...");
+    System.out.println(
+      "Starting Navigation..." + StringConstant.NEW_LINE.getValue()
+    );
     initializeGraph(args[0]);
     System.out.println(HORIZONTAL_LINE);
 
@@ -33,19 +37,21 @@ public class Navigation {
         "Please enter your mode with corresponding and appropriate parameters: "
       );
       int rawMode = input.nextInt();
-      System.out.println("######## -> " + rawMode); //doit remove
       currentMode = Mode.from(rawMode);
-      String userInput = input.nextLine();
-      if (userInput.isBlank()) {
-        throw new IllegalArgumentException(
-          "Please provide valid parameters for corresponding mode."
-        );
+      if (currentMode == Mode.EXIT_PROGRAM) {
+        break;
       }
-      System.out.println("######## -> " + userInput); //doit remove
-      //doit interpret different modes
 
+      String userInput = input.nextLine().trim();
+      checkUserInput(userInput, currentMode);
+      String result = currentMode.compute(graph, userInput);
+      System.out.println(
+        "MODE: " + currentMode + StringConstant.NEW_LINE.getValue()
+      );
+      System.out.println(result);
       System.out.println(HORIZONTAL_LINE);
     }
+    System.out.println("Navigation closed...");
   }
 
   private static void initializeGraph(String filePathForGraph)
@@ -56,7 +62,11 @@ public class Navigation {
         graphFile.getAbsoluteFile().toPath()
       )
     ) {
-      fileStream.map(Navigation::transform).forEach(graph::addEdge);
+      fileStream
+        .map(String::trim)
+        .filter(str -> !str.isBlank())
+        .map(Navigation::transform)
+        .forEach(graph::addEdge);
     }
     System.out.println(graph);
   }
@@ -75,38 +85,14 @@ public class Navigation {
     return new Edge(source, destination, weight);
   }
 
-  private enum Mode {
-    START_PROGRAM(0),
-    TRAVEL_TIME_CERTAIN_ROUTE(1),
-    FIND_ROUTES_WITH_MAX_STOPS(2),
-    FIND_ROUTES_WITH_EXACT_STOPS(3),
-    TRAVEL_TIME_SHORTEST_PATH(4),
-    TRAVEL_TIME_WITH_MAX_TIME(5),
-    EXIT_PROGRAM(6);
-
-    private final int number;
-
-    Mode(int number) {
-      this.number = number;
+  private static void checkUserInput(String userInput, Mode currentMode) {
+    if (userInput.isBlank()) {
+      throw new IllegalArgumentException(
+        String.format(
+          "Please provide valid parameters for corresponding mode '%s'.",
+          currentMode
+        )
+      );
     }
-
-    public int getNumber() {
-      return number;
-    }
-
-    private static Mode from(int number) {
-      return Arrays
-        .stream(values())
-        .filter(m -> m.getNumber() == number)
-        .filter(m -> m != START_PROGRAM)
-        .findAny()
-        .orElseThrow(
-          () ->
-            new IllegalArgumentException(
-              "Please provide valid number from 1-6, yours was: " + number
-            )
-        );
-    }
-    //    abstract void interpret(String rawInput); doit either this or other solution
   }
 }
