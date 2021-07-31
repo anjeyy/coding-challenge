@@ -10,7 +10,7 @@ For example:
 
 **Note:** Graph is directed, weighted and possibly cyclic. Self-reference of edges is **not** allowed.
 
-## table of content
+# table of content
 
 - [prerequisite](#prerequisite)
 - [how to run](#how-to-run)
@@ -22,7 +22,7 @@ For example:
     - [sample input](#sample-input)
     - [sample queries](#sample-queries)
 
-## prerequisite
+# prerequisite
 
 Before you start the program with your desired method [listed below](#how-to-run),
 there is one necessary file to create which represents the graph to be created.
@@ -53,11 +53,11 @@ Vega, Alpha Centauri, 3
 
 Feel free to construct your own graph, just the mentioned format has to match.
 
-## how to run
+# how to run
 
 There are several ways to run the program, choose a method yourself which suits you.
 
-### docker
+## docker
 
 To continue further, [prerequisite](#prerequisite) has to be fulfilled.
 
@@ -79,7 +79,7 @@ The _docker command_ is broken down to multiple parameters:
 
 For further and/or detailed information, have a look at the official [docker website](https://docs.docker.com/).
 
-### jar file
+## jar file
 
 To continue further, [prerequisite](#prerequisite) has to be fulfilled.
 
@@ -88,14 +88,14 @@ To continue further, [prerequisite](#prerequisite) has to be fulfilled.
   - > java -jar travel-distance-0.01.0.jar C:/dev/private-repo/coding-challenge/travel-distance/src/main/resources/space-highway.graph
   - the last parameter is the _absolute_ file path to the `.graph` file containing the edges of the graph
 
-## space highways
+# space highways
 
 In the distant future, humankind develops space highways between star systems.
 But due to various reasons (like solar winds, asteroid belts and so on), these highways are not always bidirectional,
 or sometimes require different travel times in each direction.
 For example, travelling from Alpha Centauri to Vega takes 7 hours while the return journey only takes 3.
 
-### assignment of tasks
+## assignment of tasks
 
 The purpose of the program you’ll develop is to help spaceship navigators to find their way through space.
 Tasks are to compute the travel time of a given route, the number of different routes between two-star systems,
@@ -104,13 +104,13 @@ and the shortest route between two-star systems.
 You can think of star systems and routes as a directed graph:
 star systems are nodes, and the routes between them are _(weighted)_ edges.
 
-#### general assumptions
+### general assumptions
 
 - There will be no more than one way per direction between any two-star systems.
 - Space highways always connect different star systems. That is, no space highway will connect a star system to itself.
 - For exercises 1—5 [below](#sample-queries): if there is no route, output `NO SUCH ROUTE`.
 
-#### sample input
+### sample input
 
 _Star systems_
 
@@ -132,11 +132,11 @@ _Space highways_
 - Vega -> Alpha Centauri: 3 hours
 - Solar System -> Vega: 7 hours
 
-#### sample graph
+### sample graph
 
 ![sample graph](./docs/sample-graph.png)
 
-#### sample queries
+### sample queries
 
 The distance of route:
 
@@ -163,7 +163,7 @@ The distance of route:
    1. Sirius -> Vega -> Alpha Centauri -> Sirius -> Vega -> Alpha Centauri -> Sirius
    1. Sirius -> Vega -> Alpha Centauri -> Sirius -> Vega -> Alpha Centauri -> Sirius -> Vega -> Alpha Centauri -> Sirius
 
-### design explanation
+# design explanation
 
 - adjacency list
 
