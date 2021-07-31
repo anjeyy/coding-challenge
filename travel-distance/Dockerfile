@@ -16,4 +16,4 @@ USER anjeyy
 
 COPY target/travel-distance*.jar /app/travel-distance.jar
 
-CMD java -jar /app/travel-distance.jar
+CMD java -jar /app/travel-distance.jar /var/graph-file.graph
