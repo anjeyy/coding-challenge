@@ -80,7 +80,7 @@ jobs:
         with:
           context: ./travel-distance
           file: ./travel-distance/Dockerfile
-          tags: anjeyy/unbendable:travel-distance-latest
+          tags: anjeyy/coding-challenge:travel-distance-latest
           pull: true
           push: true
           no-cache: true
