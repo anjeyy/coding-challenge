@@ -127,8 +127,10 @@ A _format_ overview for different _modes_:
 
 1. > 1 start, first stop, second stop, ..., destination
    1. _Example_: `1 Solar System, Vega, Alpha Centauri, Sirius, Betelgeuse`
+      <br>
 2. > 2 start, destination, MAXIMUM stops
    1. _Example_: `2 sirius, sirius, 3`
+      <br>
 3. > 3 start, destination, EXACT stops
    1. _Example_: `3 solar system, sirius, 3`
 4. > 4 start, destination
