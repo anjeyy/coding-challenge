@@ -210,7 +210,7 @@ The distance of route:
    1. Solar System -> Betelgeuse -> Sirius -> Betelgeuse -> Sirius
    1. Solar System -> Betelgeuse -> Vega -> Alpha Centauri -> Sirius
 1. Determine the duration of the shortest routes (in travel time) between _Solar System_ and _Sirius_. Solution: **9 hours**
-1. Determine the duration of the shortest routes (in travel time) starting at _Alpha Centauri_ and ending at A*lpha Centauri*. Solution: **9 hours**
+1. Determine the duration of the shortest routes (in travel time) starting at _Alpha Centauri_ and ending at _Alpha Centauri_. Solution: **9 hours**
 1. Determine all different routes starting at _Sirius_ and ending at _Sirius_ with an over travel time less than 30. Solution: **7 routes**
    1. Sirius -> Betelgeuse -> Sirius
    1. Sirius -> Vega -> Alpha Centauri -> Sirius
@@ -222,6 +222,25 @@ The distance of route:
 
 # design explanation
 
-- adjacency list
+Core concept is based off of _graphs_, they have _vertices_ and _edges_.
 
-> todo
+- Vertices
+  - are case-insensitive
+  - Example: A _vertex_ called `Solar System` is equal to `solar system` or `solAr SySTEm`.
+- Edges
+  - have a source vertex
+  - have a destination vertex
+  - have a weight
+  - self-reference is not allowed
+- Graph
+  - is directed
+  - weighted
+  - possibly cyclic
+
+The _shortest path_ calculation accepts only **positive** weights, since it's a modified dijkstra algorithm.
+Thus, with negative numbers the calculation won't work.
+If you plan to add functionality for negative numbers, have a look at
+[Bellman-Fords algorithm](https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm) and feel free to open up a pull request.
+
+> todo adjacency list
+> positive weights for algorithms
