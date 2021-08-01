@@ -121,33 +121,24 @@ Highlighted line with a red _arrow_, `1 Solar System, Vega, Alpha Centauri, Siri
 So the abstract concept to mode selection consists of two parameters, where first one is the specific mode to select from,
 the second parameter is the input followed **after** the number, which is being parsed.
 
+---
+
 A _format_ overview for different _modes_:
 
 1. > 1 start, first stop, second stop, ..., destination
-   1. Example: `1 Solar System, Vega, Alpha Centauri, Sirius, Betelgeuse`
+   1. _Example_: `1 Solar System, Vega, Alpha Centauri, Sirius, Betelgeuse`
 2. > 2 start, destination, MAXIMUM stops
-   1. Example: `2 sirius, sirius, 3`
+   1. _Example_: `2 sirius, sirius, 3`
 3. > 3 start, destination, EXACT stops
-   1. Example: `3 solar system, sirius, 3`
+   1. _Example_: `3 solar system, sirius, 3`
 4. > 4 start, destination
-   1. Example: `4 solar system, sirius`
+   1. _Example_: `4 solar system, sirius`
 5. > 5 start, destination, MAX travel time (excluded)
-   1. Example: `5 sirius, sirius, 30`
+   1. _Example_: `5 sirius, sirius, 30`
    2. `30` means `<= 30`
 6. > 6
-   1. Example: `6`
+   1. _Example_: `6`
    2. exits the program and ignores the parameter
-
----
-
-| mode format overview | description                                                                            | format                                               | example                                                    | comments           |
-| -------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------- | ------------------ |
-| 1                    | calculate the time traveled of provided route                                          | `1 start, first stop, second stop, ..., destination` | `1 Solar System, Vega, Alpha Centauri, Sirius, Betelgeuse` |                    |
-| 2                    | find all routes from a starting to an ending vertex with MAXIMUM stops made in between | `2 start, destination, MAXIMUM stops`                | `2 sirius, sirius, 3`                                      |                    |
-| 3                    | find all routes from a starting to an ending vertex with EXACT stops made in between   | `3 start, destination, EXACT stops`                  | `3 solar system, sirius, 3`                                |                    |
-| 4                    | find the shortest path with a starting and ending vertex                               | `4 start, destination`                               | `4 solar system, sirius`                                   |                    |
-| 5                    | find all routes from a starting to an ending vertex with maximum time traveled         | `5 start, destination, MAX travel time (excluded)`   | `5 sirius, sirius, 30`                                     | `30` means `<= 30` |
-| 6                    | exits the program and ignores parameter                                                | `6`                                                  | `6`                                                        |                    |
 
 # space highways
 
