@@ -125,22 +125,25 @@ the second parameter is the input followed **after** the number, which is being 
 
 A _format_ overview for different _modes_:
 
-1. > 1 start, first stop, second stop, ..., destination
-   1. _Example_: `1 Solar System, Vega, Alpha Centauri, Sirius, Betelgeuse`
-      <br>
-2. > 2 start, destination, MAXIMUM stops
-   1. _Example_: `2 sirius, sirius, 3`
-      <br>
-3. > 3 start, destination, EXACT stops
-   1. _Example_: `3 solar system, sirius, 3`
-4. > 4 start, destination
-   1. _Example_: `4 solar system, sirius`
-5. > 5 start, destination, MAX travel time (excluded)
-   1. _Example_: `5 sirius, sirius, 30`
-   2. `30` means `<= 30`
-6. > 6
-   1. _Example_: `6`
-   2. exits the program and ignores the parameter
+- > 1 start, first stop, second stop, ..., destination
+  - _Example_: `1 Solar System, Vega, Alpha Centauri, Sirius, Betelgeuse`
+    <br><br>
+- > 2 start, destination, MAXIMUM stops
+  - _Example_: `2 sirius, sirius, 3`
+    <br><br>
+- > 3 start, destination, EXACT stops
+  - _Example_: `3 solar system, sirius, 3`
+    <br><br>
+- > 4 start, destination
+  - _Example_: `4 solar system, sirius`
+    <br><br>
+- > 5 start, destination, MAX travel time (excluded)
+  - _Example_: `5 sirius, sirius, 30`
+  - `30` means `<= 30`
+    <br><br>
+- > 6
+  - _Example_: `6`
+  - exits the program and ignores the parameter
 
 # space highways
 
