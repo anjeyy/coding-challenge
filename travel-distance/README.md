@@ -224,6 +224,8 @@ The distance of route:
 
 Core concept is based off of _graphs_, they have _vertices_ and _edges_.
 
+## data structure
+
 - Vertices
   - are case-insensitive
   - Example: A _vertex_ called `Solar System` is equal to `solar system` or `solAr SySTEm`.
@@ -241,6 +243,26 @@ The _shortest path_ calculation accepts only **positive** weights, since it's a 
 Thus, with negative numbers the calculation won't work.
 If you plan to add functionality for negative numbers, have a look at
 [Bellman-Fords algorithm](https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm) and feel free to open up a pull request.
+<br>
+**Note:** _Dijkstra's algorithm_ has a time complexity of `O(V²)`, so for many _vertices_ consider implementing
+a **binary heap**, where the complexity become `O(E log V)`.
 
-> todo adjacency list
-> positive weights for algorithms
+Further I decided to have somewhat of an adjacency list to track neighbor vertices.
+It pays off especially in accessing (random) neighbors of a given vertex, because of a `HashMap`.
+
+## coding
+
+Some important notes on the coding part.
+
+The current status of the _Graph_ class is, that there are several search algorithms implemented.
+I was constantly thinking about splitting the class up where the Graph is standalone and being put in
+the several search algorithm classes to perform the given task.
+<br>
+However, I decided not to, since there are modified versions of some well-known search algorithms and
+could only be performed on specific graphs. So in my opinion it was not abstract enough for me to extract them and put more work into this.
+<br>
+Of course this is an issue which can be improved, where the search algorithms are more generic and
+several more abstract graphs are being supported for computation. This was also a time limiting issue for this challenge.
+<br>
+<br>
+**For improvements, feel free to contribute.**
