@@ -16,6 +16,7 @@ For example:
 - [how to run](#how-to-run)
   - [docker](#docker)
   - [jar file](#jar-file)
+  - [user manual](#user-manual)
 - [space highways](#space-highways)
   - [assignment of tasks](#assignment-of-tasks)
     - [general assumptions](#general-assumptions)
@@ -88,6 +89,65 @@ To continue further, [prerequisite](#prerequisite) has to be fulfilled.
 - Execute following command to start the program:
   - > java -jar travel-distance-0.01.0.jar C:/dev/private-repo/coding-challenge/travel-distance/src/main/resources/space-highway.graph
   - the last parameter is the _absolute_ file path to the `.graph` file containing the edges of the graph
+
+## user manual
+
+When you successfully launched the program, you will see something like
+
+![mode-input](./docs/program-start-input.png)
+
+First it's the initialized graph from your `.graph`-file and the second thing to notice a user input is required.
+Depending on the user input various modes will be executed.
+There are **five** different modes, all of which are based on the previous input graph.
+
+```text
+1 - calculate the time traveled of provided route
+2 - find all routes from a starting to an ending vertex with MAXIMUM stops made in between
+3 - find all routes from a starting to an ending vertex with EXACT stops made in between
+4 - find the shortest path with a starting and ending vertex
+5 - find all routes from a starting to an ending vertex with maximum time traveled
+```
+
+An example for **mode** `1` as a screenshot.
+
+![certain-route-example](./docs/certain-route-example.png)
+
+Highlighted line with a red _arrow_, `1 Solar System, Vega, Alpha Centauri, Sirius, Betelgeuse`.
+
+- first parameter: number `1` indicates the above-mentioned mode
+- second parameter: `Solar System, Vega, Alpha Centauri, Sirius, Betelgeuse` is the route for which the travel time shall be calculated
+  (**Note:** Ordering is important).
+
+So the abstract concept to mode selection consists of two parameters, where first one is the specific mode to select from,
+the second parameter is the input followed **after** the number, which is being parsed.
+
+A _format_ overview for different _modes_:
+
+1. > 1 start, first stop, second stop, ..., destination
+   1. Example: `1 Solar System, Vega, Alpha Centauri, Sirius, Betelgeuse`
+2. > 2 start, destination, MAXIMUM stops
+   1. Example: `2 sirius, sirius, 3`
+3. > 3 start, destination, EXACT stops
+   1. Example: `3 solar system, sirius, 3`
+4. > 4 start, destination
+   1. Example: `4 solar system, sirius`
+5. > 5 start, destination, MAX travel time (excluded)
+   1. Example: `5 sirius, sirius, 30`
+   2. `30` means `<= 30`
+6. > 6
+   1. Example: `6`
+   2. exits the program and ignores the parameter
+
+---
+
+| mode format overview | description                                                                            | format                                               | example                                                    | comments           |
+| -------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------- | ------------------ |
+| 1                    | calculate the time traveled of provided route                                          | `1 start, first stop, second stop, ..., destination` | `1 Solar System, Vega, Alpha Centauri, Sirius, Betelgeuse` |                    |
+| 2                    | find all routes from a starting to an ending vertex with MAXIMUM stops made in between | `2 start, destination, MAXIMUM stops`                | `2 sirius, sirius, 3`                                      |                    |
+| 3                    | find all routes from a starting to an ending vertex with EXACT stops made in between   | `3 start, destination, EXACT stops`                  | `3 solar system, sirius, 3`                                |                    |
+| 4                    | find the shortest path with a starting and ending vertex                               | `4 start, destination`                               | `4 solar system, sirius`                                   |                    |
+| 5                    | find all routes from a starting to an ending vertex with maximum time traveled         | `5 start, destination, MAX travel time (excluded)`   | `5 sirius, sirius, 30`                                     | `30` means `<= 30` |
+| 6                    | exits the program and ignores parameter                                                | `6`                                                  | `6`                                                        |                    |
 
 # space highways
 
