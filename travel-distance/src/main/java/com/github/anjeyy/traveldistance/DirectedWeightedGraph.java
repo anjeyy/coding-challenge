@@ -275,8 +275,12 @@ class DirectedWeightedGraph {
     return paths.isEmpty()
       ? NO_SUCH_ROUTE
       : paths.size() +
-      " routes: \n" +
-      paths.stream().map(Object::toString).collect(Collectors.joining("\n"));
+      " routes: " +
+      StringConstant.NEW_LINE.getValue() +
+      paths
+        .stream()
+        .map(Object::toString)
+        .collect(Collectors.joining(StringConstant.NEW_LINE.getValue()));
   }
 
   private List<List<Vertex>> determineRoutesWithMaxStops(
@@ -356,7 +360,8 @@ class DirectedWeightedGraph {
       .anyMatch(v -> v < 0);
     if (negativeWeightPresent) {
       throw new IllegalStateException(
-        "This Graph is in a non-appropriate state.\n" +
+        "This Graph is in a non-appropriate state." +
+        StringConstant.NEW_LINE.getValue() +
         "No shortest path findings can be determined due to negative weights."
       );
     }

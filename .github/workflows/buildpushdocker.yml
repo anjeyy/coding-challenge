@@ -1,4 +1,4 @@
-name: Publish Docker images
+name: mvn build, test & build, publish docker image
 on:
   push:
     branches: [main]
@@ -35,54 +35,52 @@ jobs:
           cp ./travel-distance/target/travel-distance*.jar path/to/artifact
           ls -la path/to/artifact
 
-# doit as docker?
-#      - name: Upload saved artifacts
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: my-artifact
-#          path: path/to/artifact
-#          retention-days: 1
-#          if-no-files-found: error
+      - name: Upload saved artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: path/to/artifact
+          retention-days: 1
+          if-no-files-found: error
 
-#  push-client-to-registry:
-#    name: doit partly for sub project - Client Docker Build & Push
-#    runs-on: ubuntu-latest
-#    needs:
-#      - build-jar
-#
-#    if: github.event.pull_request.merged
-#    steps:
-#      - name: Check out repository
-#        uses: actions/checkout@v2
-#
-#      - name: Set up Docker Buildx
-#        uses: docker/setup-buildx-action@v1
-#
-#      - name: Login to DockerHub
-#        uses: docker/login-action@v1
-#        with:
-#          username: ${{ secrets.DOCKER_USERNAME }}
-#          password: ${{ secrets.DOCKER_PASSWORD }}
-#
-#      - name: Download artifacts
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: my-artifact
-#          path: path/to/artifact
-#
-#      - name: Create directory and copy artifacts
-#        run: |
-#          mkdir -p grpc-client/target
-#          cp path/to/artifact/grpc-client*.jar grpc-client/target
-#          ls -la grpc-client/target
-#
-#      - name: Build & Push [Client] to Docker Hub
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: ./grpc-client
-#          file: ./grpc-client/Dockerfile
-#          tags: anjeyy/unbendable:grpc-sample-client-latest
-#          pull: true
-#          push: true
-#          no-cache: true
+  push-travel-distance-to-registry:
+    name: Travel Distance Docker Build & Push
+    runs-on: ubuntu-latest
+    needs:
+      - build-jar
 
+    if: github.event.pull_request.merged
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: my-artifact
+          path: path/to/artifact
+
+      - name: Create directory and copy artifacts
+        run: |
+          mkdir -p travel-distance/target
+          cp path/to/artifact/travel-distance*.jar travel-distance/target
+          ls -la travel-distance/target
+
+      - name: Build & Push [Client] to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: ./travel-distance
+          file: ./travel-distance/Dockerfile
+          tags: anjeyy/coding-challenge:travel-distance-latest
+          pull: true
+          push: true
+          no-cache: true
