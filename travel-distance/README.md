@@ -21,6 +21,7 @@ For example:
     - [general assumptions](#general-assumptions)
     - [sample input](#sample-input)
     - [sample queries](#sample-queries)
+- [design explanation](#design-explanation)
 
 # prerequisite
 
