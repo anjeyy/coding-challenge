@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -35,6 +34,7 @@ class DirectedWeightedGraph {
 
   /**
    * Static factory method for an easier use and initialization of {@link DirectedWeightedGraph}.
+   *
    * @return initialized empty graph
    */
   static DirectedWeightedGraph create() {
@@ -45,14 +45,33 @@ class DirectedWeightedGraph {
     adjacencyList = new HashMap<>();
   }
 
+  /**
+   * Adds a vertex, if not already represented inside this graph. Also creating a new {@link HashSet}
+   * to store {@link Edge edges}.
+   *
+   * @param vertex to add
+   */
   void addVertex(Vertex vertex) {
-    adjacencyList.putIfAbsent(vertex, new LinkedHashSet<>());
+    adjacencyList.putIfAbsent(vertex, new HashSet<>());
   }
 
+  /**
+   * Removes a vertex with all its linked edges, so that there is no open connection left.
+   * <i>Open</i> means: Having an {@link Edge} with only one vertex, where the other
+   * source or destination vertex is missing.
+   *
+   * @param vertex to remove
+   */
   void removeVertex(Vertex vertex) {
     adjacencyList.remove(vertex);
   }
 
+  /**
+   * Adds an {@link Edge}, if source vertex is not present, creates first an entry with source vertex
+   * via {@link #addVertex(Vertex)}.
+   *
+   * @param edge to add
+   */
   void addEdge(Edge edge) {
     Vertex sourceVertex = edge.getSource();
     boolean vertexNotExistent = !adjacencyList.containsKey(sourceVertex);
@@ -70,6 +89,16 @@ class DirectedWeightedGraph {
     return edgeSet;
   }
 
+  /**
+   * Given an {@link Edge}, removes this {@link Edge} if corresponding source vertex
+   * (linked with {@link Edge#getSource()}), has a {@code value} entry
+   * inside {@link DirectedWeightedGraph#adjacencyList}.
+   *
+   * <p>
+   * <b>Note:</b> An {@link Edge} can only be part of <b>one</b> source vertex in {@link #adjacencyList}.
+   *
+   * @param edge to remove
+   */
   void removeEdge(Edge edge) {
     Vertex sourceVertex = edge.getSource();
     boolean vertexExists = adjacencyList.containsKey(sourceVertex);
@@ -124,6 +153,17 @@ class DirectedWeightedGraph {
     return distance + " hours";
   }
 
+  /**
+   * Given a source and destination as {@link Vertex vertex} for a
+   * {@link DirectedWeightedGraph directed weighted graph}, this method performs a <i>breadth first search</i>
+   * algorithm. Additionally, all paths with matching source and destination are returned formatted.<br>
+   * <b>Note: </b> Self-reference is not allowed, so the trivial routes are excluded.
+   *
+   * @param source starting point
+   * @param destination ending point
+   * @param exactInBetweenStops exact stops or depth in a BFS
+   * @return proper formatted routes
+   */
   String determineAndDisplayRoutesWithExactlyStops(
     Vertex source,
     Vertex destination,
@@ -149,12 +189,12 @@ class DirectedWeightedGraph {
   /**
    * Given a source and destination as {@link Vertex vertex} for a
    * {@link DirectedWeightedGraph directed weighted graph}, this method performs a <i>breadth first search</i>
-   * algorithm. Additionally all paths with matching source and destination are returned formatted.<br>
+   * algorithm. Additionally, all paths with matching source and destination are returned formatted.<br>
    * <b>Note: </b> Self-reference is not allowed, so the trivial routes are excluded.
    *
    * @param source starting point
    * @param destination ending point
-   * @param maxStops maximal stops or depth in a BFS
+   * @param maxStops maximum stops or depth in a BFS
    * @return proper formatted routes
    */
   String determineAndDisplayRoutesWithMaxStops(
@@ -173,6 +213,17 @@ class DirectedWeightedGraph {
     return printFoundRoutes(paths);
   }
 
+  /**
+   * Given a source and destination as {@link Vertex vertex} for a
+   * {@link DirectedWeightedGraph directed weighted graph}, this method performs a <i>breadth first search</i>
+   * algorithm. Additionally, all paths with matching source and destination are returned formatted.<br>
+   * <b>Note: </b> Self-reference is not allowed, so the trivial routes are excluded.
+   *
+   * @param source starting point
+   * @param destination ending point
+   * @param maxTime maximum weight/time of all weights
+   * @return proper formatted routes
+   */
   String determineAndDisplayRoutesWithMaxTime(
     Vertex source,
     Vertex destination,

@@ -3,7 +3,7 @@ package com.github.anjeyy.traveldistance;
 import java.util.Objects;
 
 /**
- * Represents a so called edge inside a graph data structure.<br>
+ * Represents a so-called edge inside a graph data structure.<br>
  * For a detailed explanation please have a look at referenced links below.
  * <p>
  * <b>Note: </b> Self-reference is NOT allowed.
@@ -19,7 +19,7 @@ class Edge {
   private int weight;
 
   /**
-   * Initialized the edge and establishes a connection between two vertices, they are then so called neighbors.
+   * Initialized the edge and establishes a connection between two vertices, they are then so-called neighbors.
    *
    * @param source starting vertex
    * @param destination ending vertex
